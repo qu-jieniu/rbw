@@ -2,6 +2,11 @@
 
 ## Unreleased (jieniu)
 
+* Explicitly make accepted offline-fixture TCP sockets blocking before bounded
+  request reads. macOS/BSD inherits the nonblocking listener flag whereas Linux
+  does not; this avoids immediate WouldBlock panics without retries or changing
+  production networking; the existing complete offline cases retain their assertions.
+
 * Keep offline test configuration, cache and runtime sockets inside the fixture
   on both Linux and macOS, including macOS's TMPDIR-based socket directory.
 

@@ -39,6 +39,9 @@ impl Server {
                     }
                     Err(e) => panic!("fake server: {e}"),
                 };
+                // BSD/macOS accept inherits O_NONBLOCK; request reads need the
+                // existing timeout, not the listener's nonblocking shutdown mode.
+                socket.set_nonblocking(false).unwrap();
                 socket.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
                 let mut reader = std::io::BufReader::new(&socket);
                 let mut request = String::new();
